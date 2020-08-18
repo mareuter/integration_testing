@@ -40,7 +40,7 @@ async def main(opts):
         enable_tasks.append(ce)
 
     if not opts.no_mt:
-        me = mtcs.enable()
+        me = mtcs.enable(settings={"mtm1m3": "Default"})
         enable_tasks.append(me)
 
     await asyncio.gather(*enable_tasks)
