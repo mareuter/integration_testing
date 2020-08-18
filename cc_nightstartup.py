@@ -28,7 +28,7 @@ async def main(opts):
         comcam = ComCam(domain, intended_usage=ComCamUsages().StateTransition)
         start_tasks.append(comcam.start_task)
 
-    await asyncio.gather(start_tasks)
+    await asyncio.gather(*start_tasks)
 
     if not opts.no_mt:
         mtcs.check.dome = False
@@ -46,14 +46,14 @@ async def main(opts):
         me = mtcs.enable()
         enable_tasks.append(me)
 
-    await asyncio.gather(enable_tasks)
+    await asyncio.gather(*enable_tasks)
     
 if __name__ == "__main__":
     
     parser = argparse.ArgumentParser()
     group = parser.add_mutually_exclusive_group()
-    group.add_argument("--no-cc", dest="no_cc", action="store_false")
-    group.add_argument("--no-mt", dest="no_mt", action="store_false")
+    group.add_argument("--no-cc", dest="no_cc", action="store_true")
+    group.add_argument("--no-mt", dest="no_mt", action="store_true")
     
     args = parser.parse_args()
     
