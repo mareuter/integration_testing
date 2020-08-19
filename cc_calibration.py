@@ -9,6 +9,8 @@ from lsst.ts import salobj
 from lsst.ts.observatory.control.maintel.mtcs import MTCS, MTCSUsages
 from lsst.ts.observatory.control.maintel.comcam import ComCam, ComCamUsages
 
+import helpers
+
 async def main(opts):
 
     stream_handler = logging.StreamHandler(sys.stdout)
@@ -32,16 +34,30 @@ async def main(opts):
         mtcs.check.dome = False
         mtcs.check.mtdometrajectory = False
 
+    do_bias, do_dark, do_flat = helpers.calibs_to_do(opts.calibs)
+
     date = Time.now()
     group_id = f'CALSET_{date.tai.strftime("%Y%m%d_%H%M")}'
 
-    await comcam.take_bias(nbias=2, group_id=group_id)
+    if do_bias:
+        await comcam.take_bias(nbias=opts.nbias, group_id=group_id)
 
+    if do_dark:
+        await comcam.take_darks(exptime=opts.dark_exptime, ndarks=opts.ndarks, group_id=group_id)
+
+    if do_flat:
+        await comcam.take_flats(exptime=opts.flat_exptime, nflats=opts.nflats, group_id=group_id)
 
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--no-mt", dest="no_mt", action="store_true")
+    parser.add_argument("--nbias", dest="nbias", type=int, default=1)
+    parser.add_argument("--ndarks", dest="ndarks", type=int, default=1)
+    parser.add_argument("--nflats", dest="nflats", type=int, default=1)
+    parser.add_argument("--dark-exptime", dest="dark_exptime", type=float, default=5.0)
+    parser.add_argument("--flat-exptime", dest="flat_exptime", type=float, default=2.0)
+    parser.add_argument("--calibs", dest="calibs", choices=helpers.CALIB_OPTIONS, default="bias")
 
     args = parser.parse_args()
 
