@@ -36,7 +36,8 @@ async def main(opts):
 
     if not opts.no_at:
         ae = atcs.enable(settings={"athexapod": "ncsa_202002.yaml",
-                                   "atdome": "test"})
+                                   "atdome": "test",
+                                   "ataos": "current"})
         enable_tasks.append(ae)
 
     await asyncio.gather(*enable_tasks)
