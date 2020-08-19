@@ -10,6 +10,7 @@ from lsst.ts.observatory.control.maintel.mtcs import MTCS, MTCSUsages
 from lsst.ts.observatory.control.maintel.comcam import ComCam, ComCamUsages
 
 import helpers
+import mt_utils
 
 async def main(opts):
 
@@ -46,12 +47,19 @@ async def main(opts):
         await comcam.take_darks(exptime=opts.dark_exptime, ndarks=opts.ndarks, group_id=group_id)
 
     if do_flat:
+        if not opts.no_mt and not opts.no_slew:
+            await mt_utils.slew_to_flatfield(mtcs)
+
         await comcam.take_flats(exptime=opts.flat_exptime, nflats=opts.nflats, group_id=group_id)
+
+        if not opts.no_mt and not opts.no_slew:
+            await mt_utils.slew_to_park(mtcs)
 
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--no-mt", dest="no_mt", action="store_true")
+    parser.add_argument("--no-slew", dest="no_slew", action="store_true")
     parser.add_argument("--nbias", dest="nbias", type=int, default=1)
     parser.add_argument("--ndarks", dest="ndarks", type=int, default=1)
     parser.add_argument("--nflats", dest="nflats", type=int, default=1)
