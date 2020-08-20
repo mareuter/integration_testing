@@ -96,7 +96,7 @@ async def slew2(mtcs, stop_tracking=False):
     print("Slewing Telescope")
     ack = await mtcs.rem.mtptg.cmd_raDecTarget.start(timeout=30.)
     print(f"ack={ack.ack} ack.error={ack.error}, ackcmd.result={ack.result}")
-    result = await mtcs.wait_in_position(30.)
+    result = await mtcs.wait_in_forposition(30.)
     print(result)
 
     if stop_tracking:

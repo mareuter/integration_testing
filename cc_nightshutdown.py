@@ -7,6 +7,8 @@ from lsst.ts import salobj
 from lsst.ts.observatory.control.maintel.mtcs import MTCS, MTCSUsages
 from lsst.ts.observatory.control.maintel.comcam import ComCam, ComCamUsages
 
+import mt_utils
+
 async def main(opts):
 
     stream_handler = logging.StreamHandler(sys.stdout)
@@ -42,6 +44,9 @@ async def main(opts):
         shutdown_tasks.append(task)
 
     if not opts.no_mt:
+        if not opts.no_mt:
+            await mt_utils.slew_to_park(mtcs)
+
         if opts.full:
             task = mtcs.set_state(salobj.State.OFFLINE)
         else:
