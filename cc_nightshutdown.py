@@ -21,7 +21,7 @@ async def main(opts):
     start_tasks = []
 
     if not opts.no_mt:
-        mtcs = MTCS(domain, intended_usage=MTCSUsages().StartUp)
+        mtcs = MTCS(domain, intended_usage=MTCSUsages().Slew)
         start_tasks.append(mtcs.start_task)
 
     if not opts.no_cc:
