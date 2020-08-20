@@ -32,17 +32,23 @@ async def main(opts):
         mtcs.check.dome = False
         mtcs.check.mtdometrajectory = False
 
-    standby_tasks = []
+    shutdown_tasks = []
 
     if not opts.no_cc:
-        ce = comcam.standby()
-        standby_tasks.append(ce)
+        if opts.full:
+            task = comcam.set_state(salobj.State.OFFLINE)
+        else:
+            task = comcam.standby()
+        shutdown_tasks.append(task)
 
     if not opts.no_mt:
-        me = mtcs.standby()
-        standby_tasks.append(me)
+        if opts.full:
+            task = mtcs.set_state(salobj.State.OFFLINE)
+        else:
+            task = mtcs.standby()
+        shutdown_tasks.append(task)
 
-    await asyncio.gather(*standby_tasks)
+    await asyncio.gather(*shutdown_tasks)
 
 if __name__ == "__main__":
 
@@ -50,6 +56,7 @@ if __name__ == "__main__":
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--no-cc", dest="no_cc", action="store_true")
     group.add_argument("--no-mt", dest="no_mt", action="store_true")
+    group.add_argument("--full", dest="full", action="store_true")
 
     args = parser.parse_args()
 
