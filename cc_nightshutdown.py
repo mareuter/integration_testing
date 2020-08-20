@@ -44,7 +44,7 @@ async def main(opts):
         shutdown_tasks.append(task)
 
     if not opts.no_mt:
-        if not opts.no_mt:
+        if not opts.no_mt and not opts.no_slew:
             await mt_utils.slew_to_park(mtcs)
 
         if opts.full:
@@ -61,7 +61,8 @@ if __name__ == "__main__":
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--no-cc", dest="no_cc", action="store_true")
     group.add_argument("--no-mt", dest="no_mt", action="store_true")
-    group.add_argument("--full", dest="full", action="store_true")
+    parser.add_argument("--no-slew", dest="no_slew", action="store_true")
+    parser.add_argument("--full", dest="full", action="store_true")
 
     args = parser.parse_args()
 
