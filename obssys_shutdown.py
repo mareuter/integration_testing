@@ -18,7 +18,6 @@ async def main(opts):
 
     domain = salobj.Domain()
     if not opts.no_atq:
-        # AT ScriptQueue is index=2
         atqueue = salobj.Remote(domain, 'ScriptQueue', index=2)
         start_tasks.append(atqueue.start_task)
 
@@ -55,11 +54,10 @@ async def main(opts):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument("--no-atq", dest="no_atq", action="store_true")
-    group.add_argument("--no-mtq", dest="no_mtq", action="store_true")
-    group.add_argument("--no-w", dest="no_w", action="store_true")
-    group.add_argument("--full", dest="full", action="store_true")
+    parser.add_argument("--no-atq", dest="no_atq", action="store_true")
+    parser.add_argument("--no-mtq", dest="no_mtq", action="store_true")
+    parser.add_argument("--no-w", dest="no_w", action="store_true")
+    parser.add_argument("--full", dest="full", action="store_true")
 
     args = parser.parse_args()
 
