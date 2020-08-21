@@ -30,7 +30,7 @@ async def main(opts):
     shutdown_tasks = []
     if not opts.no_la:
         if opts.full:
-            shutdown_tasks.append(latiss.set_state(salobj.state.OFFLINE))
+            shutdown_tasks.append(latiss.set_state(salobj.State.OFFLINE))
         else:
             shutdown_tasks.append(latiss.standby())
 
@@ -41,7 +41,7 @@ async def main(opts):
     await asyncio.gather(*shutdown_tasks)
 
     if opts.full and not opts.no_at:
-        await atcs.set_state(salobj.state.OFFLINE)
+        await atcs.set_state(salobj.State.OFFLINE)
 
 async def at_shutdown(atcs):
     await atcs.point_azel(target_name="Park position",

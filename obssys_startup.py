@@ -32,7 +32,7 @@ async def main(opts):
 
     await asyncio.gather(*start_tasks)
 
-    enabled_state = salobj.state.ENABLED
+    enabled_state = salobj.State.ENABLED
 
     enable_tasks = []
     if not opts.no_atq:

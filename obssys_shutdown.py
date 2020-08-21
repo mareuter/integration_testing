@@ -33,9 +33,9 @@ async def main(opts):
     await asyncio.gather(*start_tasks)
 
     if opts.full:
-        shutdown_state = salobj.state.OFFLINE
+        shutdown_state = salobj.State.OFFLINE
     else:
-        shutdown_state = salobj.state.STANDBY
+        shutdown_state = salobj.State.STANDBY
 
     shutdown_tasks = []
     if not opts.no_atq:
